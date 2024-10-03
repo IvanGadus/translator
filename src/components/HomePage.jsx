@@ -1,8 +1,55 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { CiMicrophoneOn } from "react-icons/ci";
 
 export default function HomePage(props) {
 	const { setFile, setAudioStream } = props;
+
+	const [recordingStatus, setRecordingStatus] = useState("inactive");
+	const [audioChunkc, setAudioChunkc] = useState([]);
+	const [duration, setDuration] = useState(0);
+
+	const mediaRecorder = useRef(null);
+
+	const mimeType = "audio/webm";
+
+	const startRecording = async () => {
+		let tempStream;
+		console.log("starte recording");
+
+		try {
+			const streamData = await navigator.mediaDevices.getUserMedia({
+				audio: true,
+				video: false,
+			});
+			tempStream = streamData;
+		} catch (e) {
+			console.log(e.message);
+			return;
+		}
+		setRecordingStatus("recording");
+
+		const media = new MediaRecorder(tempStream, { type: mimeType });
+
+		mediaRecorder.current = media;
+		mediaRecorder.current.start();
+
+		let localAudioChunks = [];
+		mediaRecorder.current.ondataavailable = (event) => {
+			if (typeof event.data === "undefined") {
+				return;
+			}
+			if (event.data.size === 0) {
+				return;
+			}
+			localAudioChunks.push(event.data);
+		};
+		setAudioChunkc(localAudioChunks);
+	};
+
+	const stopRecording = async () => {
+		setRecordingStatus("inactive");
+	};
+
 	return (
 		<main className="flex-1 p-4 flex flex-col text-center justify-center gap-3 sm:gap-4 md:gap-5 font-medium text-xl pb-20">
 			<h1 className="text-blue-400 font-semibold text-5xl sm:text-6xl md:text-7xl">

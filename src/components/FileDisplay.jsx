@@ -4,13 +4,13 @@ import { BsPencil } from "react-icons/bs";
 export default function FileDisplay(props) {
 	const { file, resetAudio, audioStream } = props;
 	return (
-		<main className="flex-1 p-4 flex flex-col text-center justify-center gap-3 sm:gap-4 md:gap-5 font-medium text-xl pb-20 w-fit mx-auto max-w-full">
+		<main className="flex-1 p-4 flex flex-col text-center justify-center gap-3 sm:gap-4 md:gap-5 font-medium text-xl pb-20 w-72 sm:w-96 mx-auto max-w-full">
 			<h1 className="text-blue-400 font-semibold text-4xl sm:text-5xl md:text-6xl">
 				Tvoj súbor
 			</h1>
-			<div className="flex flex-col text-left mx-auto my-4">
+			<div className="flex flex-col text-left  my-4">
 				<h3 className="font-semibold">Meno</h3>
-				<p>{file.name}</p>
+				<p>{file ? file.name : "Vlastné audio"}</p>
 			</div>
 			<div className="flex items-center justify-between gap-4">
 				<button

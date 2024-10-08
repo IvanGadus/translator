@@ -55,6 +55,24 @@ function App() {
 			worker.current.removeEventListener("message", onMessageReceive);
 	}, []);
 
+	const readAudioFrom = async (file) => {
+		const samplingRate = 16000;
+		const audioCTX = new AudioContext({ sampleRate: samplingRate });
+		const response = await file.arrayBuffer();
+		const decoded = audioCTX.decodeAudioData(response);
+		const audio = decoded.getChannelData(0);
+		return audio;
+	};
+
+	const handleFormSubmission = async () => {
+		if (!file && !audioStream) {
+			return;
+		}
+		let audio = await readAudioFrom(file ? file : audioStream);
+		const modelName = "openai/whisper-tiny.en";
+		worker.current.post;
+	};
+
 	return (
 		<div className="flex flex-col max-w-[1000px] w-full mx-auto">
 			<section className="min-h-screen flex flex-col">
